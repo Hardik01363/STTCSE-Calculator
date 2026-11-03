@@ -24,6 +24,7 @@ all: $(APP_TARGET)
 $(APP_TARGET): $(APP_OBJS) | $(BIN_DIR)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 	@ln -sf $(APP_TARGET) calculator
+	@ln -sf $(APP_TARGET) adder
 
 $(TEST_TARGET): $(TEST_OBJS) | $(BIN_DIR)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
@@ -47,7 +48,7 @@ test: $(TEST_TARGET)
 	@./$(TEST_TARGET)
 
 clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR) calculator
+	rm -rf $(OBJ_DIR) $(BIN_DIR) calculator adder
 
 help:
 	@echo "Available Make targets:"

@@ -1,6 +1,6 @@
 # STTCSE Calculator
 
-A modular, robust, and tested command-line & interactive calculator written in C.
+A modular, robust, and tested command-line & interactive calculator written in C with Docker containerization support.
 
 ## Features
 
@@ -17,6 +17,7 @@ A modular, robust, and tested command-line & interactive calculator written in C
   - **Interactive Mode**: Friendly menu-driven interface with input validation and loop.
   - **CLI Mode**: Run single-line calculations directly from the terminal (ideal for scripting and testing).
 - **Unit Test Suite**: Built-in test suite covering edge cases and arithmetic correctness.
+- **Docker Support**: Containerized build and execution via Ubuntu-based Dockerfile.
 
 ---
 
@@ -24,28 +25,62 @@ A modular, robust, and tested command-line & interactive calculator written in C
 
 ```text
 STTCSE-Calculator/
+├── Dockerfile            # Container configuration matching lab specifications
+├── Makefile              # Build automation script
+├── README.md             # Project documentation and usage guide
+├── adder/                # Source package for container ADD directive
+│   ├── Makefile
+│   ├── include/
+│   ├── src/
+│   └── tests/
 ├── include/
 │   └── calculator.h      # Public API declarations and status codes
 ├── src/
 │   ├── calculator.c      # Implementation of mathematical operations
 │   └── main.c            # CLI and interactive interface
-├── tests/
-│   └── test_calculator.c # Unit test suite
-├── Makefile              # Build automation script
-└── README.md             # Documentation
+└── tests/
+    └── test_calculator.c # Unit test suite
 ```
 
 ---
 
-## Building the Project
+## Docker Instructions
 
-Use `make` to compile the project:
+### 1. Build the Docker Image
+```bash
+docker build -t sttcse-calculator -t adder:latest .
+```
+
+### 2. Run Single Calculations via Container
+```bash
+docker run --rm sttcse-calculator 10 + 5
+docker run --rm sttcse-calculator 100 - 37
+docker run --rm sttcse-calculator 12 '*' 8
+docker run --rm sttcse-calculator 144 / 12
+docker run --rm sttcse-calculator 2 ^ 8
+docker run --rm sttcse-calculator sqrt 144
+docker run --rm sttcse-calculator fact 5
+```
+
+### 3. Run Interactive Calculator in Container
+```bash
+docker run -it --rm sttcse-calculator
+```
+
+### 4. Run Unit Tests Inside Container
+```bash
+docker run --rm --entrypoint make sttcse-calculator test
+```
+
+---
+
+## Native Build Instructions
+
+Use `make` to compile locally:
 
 ```bash
 make
 ```
-
-This compiles the source files into `bin/calculator` and creates a `./calculator` link at the root.
 
 ### Other Useful Make Targets
 
@@ -75,45 +110,13 @@ Run the calculator without arguments:
 ```bash
 ./calculator
 ```
-Output:
-```text
-===========================================
-            STTCSE Calculator              
-===========================================
-
-Choose an operation:
-  1. Addition (+)
-  2. Subtraction (-)
-  3. Multiplication (*)
-  4. Division (/)
-  5. Modulo (%)
-  6. Power (^)
-  7. Square Root (sqrt)
-  8. Factorial (!)
-  9. Exit
-Enter choice (1-9):
-```
 
 ### 2. Command-Line Arguments Mode
 Run one-off expressions directly:
 ```bash
-# Addition
 ./calculator 10 + 5
-# Output: 10 + 5 = 15
-
-# Division
 ./calculator 22 / 7
-# Output: 22 / 7 = 3.14286
-
-# Power
 ./calculator 2 ^ 10
-# Output: 2 ^ 10 = 1024
-
-# Square root
 ./calculator sqrt 144
-# Output: sqrt(144) = 12
-
-# Factorial
 ./calculator fact 6
-# Output: 6! = 720
 ```
